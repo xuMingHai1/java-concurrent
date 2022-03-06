@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="concurrency-test" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="concurrency-test" target="1.8" />
+      <module name="demo" target="8" />
+      <module name="java-concurrent" target="8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
