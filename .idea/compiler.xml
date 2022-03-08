@@ -7,12 +7,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="concurrency-test" />
+        <module name="java-concurrent" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="concurrency-test" target="1.8" />
-      <module name="demo" target="8" />
+    <bytecodeTargetLevel target="8">
+      <module name="concurrency-test" target="8" />
       <module name="java-concurrent" target="8" />
+      <module name="untitled" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

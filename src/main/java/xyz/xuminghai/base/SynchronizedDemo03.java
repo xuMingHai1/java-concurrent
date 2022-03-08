@@ -24,15 +24,33 @@ public class SynchronizedDemo03 {
     /**
      * 自增或自减的次数
      */
-    private static final int FREQUENCY = 1_000_000;
+    public static final int FREQUENCY = 1_000_000;
 
     /**
      * 是否加锁，加锁为true不加锁为false
      */
-    private static final boolean IS_SYNCHRONIZED = false;
+    private final boolean isSynchronized;
+
+    public SynchronizedDemo03(boolean isSynchronized) {
+        this.isSynchronized = isSynchronized;
+    }
 
 
     public static void main(String[] args) {
+
+        // 无锁的运行
+        new SynchronizedDemo03(false).run();
+
+        // 加锁的运行
+        new SynchronizedDemo03(true).run();
+
+    }
+
+
+    /**
+     * 运行示例
+     */
+    public void run() {
         // 多线程共享的资源
         final Resource resource = new Resource();
 
@@ -44,7 +62,7 @@ public class SynchronizedDemo03 {
             public void run() {
                 // t1线程自增
                 for (int i = 0; i < FREQUENCY; i++) {
-                    if (IS_SYNCHRONIZED) {
+                    if (isSynchronized) {
                         resource.syncIncrement();
                     } else {
                         resource.increment();
@@ -59,7 +77,7 @@ public class SynchronizedDemo03 {
             public void run() {
                 // t1线程自减
                 for (int i = 0; i < FREQUENCY; i++) {
-                    if (IS_SYNCHRONIZED) {
+                    if (isSynchronized) {
                         resource.syncDecrement();
                     } else {
                         resource.decrement();
@@ -76,7 +94,7 @@ public class SynchronizedDemo03 {
         // 开始计时运行时长
         final long startTimeMillis = System.currentTimeMillis();
 
-        if (IS_SYNCHRONIZED) {
+        if (isSynchronized) {
             LOGGER.info("加锁的运行");
         } else {
             LOGGER.info("无锁的运行");
@@ -92,11 +110,9 @@ public class SynchronizedDemo03 {
             // 获取最后的结果，请区分加锁和不加锁的区别
             LOGGER.info("i = {}", Resource.getValue());
             LOGGER.info("运行时长：{}（毫秒）", System.currentTimeMillis() - startTimeMillis);
+            // 初始化结果
+            Resource.i = 0;
         }
-
-
-
-
     }
 
     /**
@@ -141,7 +157,7 @@ public class SynchronizedDemo03 {
          * 而前两个加的锁是这个类的实例对象，因为锁是不一样的，所以在我们调用这个方法的时候，他并不会跟前两个方法发生争抢锁的竞争关系
          * @return int i
          */
-        private synchronized static int getValue() {
+        private static synchronized int getValue() {
             return i;
         }
 
