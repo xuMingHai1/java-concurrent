@@ -38,8 +38,6 @@ THE POSSIBILITY OF SUCH DAMAGE.
     <packaging>jar</packaging>
     <version>1.0</version>
 
-    <name>JCStress test sample</name>
-
     <dependencies>
         <dependency>
             <groupId>org.openjdk.jcstress</groupId>
@@ -50,16 +48,13 @@ THE POSSIBILITY OF SUCH DAMAGE.
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
 
         <!--
             jcstress version to use with this project.
           -->
         <jcstress.version>0.15</jcstress.version>
-
-        <!--
-            Java source/target to use for compilation.
-          -->
-        <javac.target>8</javac.target>
 
         <!--
             Name of the test Uber-JAR to generate.
@@ -74,11 +69,6 @@ THE POSSIBILITY OF SUCH DAMAGE.
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.10.0</version>
-                <configuration>
-                    <compilerVersion>${javac.target}</compilerVersion>
-                    <source>${javac.target}</source>
-                    <target>${javac.target}</target>
-                </configuration>
             </plugin>
 
             <plugin>
