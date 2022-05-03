@@ -24,8 +24,8 @@ public class LogbackConfig extends ContextAwareBase implements Configurator {
         final ConsoleAppender<ILoggingEvent> consoleAppender = new ConsoleAppender<>();
         // 设置上下文
         consoleAppender.setContext(loggerContext);
-        // 设置附加器名字
-        consoleAppender.setName("console");
+        // 设置顶级附加器名字
+        consoleAppender.setName("root");
 
         // 字符集
         final LayoutWrappingEncoder<ILoggingEvent> encoder = new LayoutWrappingEncoder<>();

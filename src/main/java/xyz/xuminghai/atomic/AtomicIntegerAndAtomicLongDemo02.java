@@ -14,7 +14,7 @@ import java.util.function.IntUnaryOperator;
  *
  * @author xuMingHai
  */
-@SuppressWarnings("AlibabaAvoidManuallyCreateThread")
+@SuppressWarnings({"AlibabaAvoidManuallyCreateThread", "AlibabaUndefineMagicConstant"})
 public class AtomicIntegerAndAtomicLongDemo02 {
 
 
@@ -25,8 +25,51 @@ public class AtomicIntegerAndAtomicLongDemo02 {
 
     public static void main(String[] args) {
 
-        // 多个线程共享的资源
-        final SimpleAtomicInteger simpleAtomicInteger = new SimpleAtomicInteger();
+        // 多个线程共享的资源，初始值为 1
+        final SimpleAtomicInteger simpleAtomicInteger = new SimpleAtomicInteger(1);
+
+        // 使用多个线程测试自定义的原子类
+        final Thread t1 = new Thread(() -> {
+            // 第一个线程自减
+            for (int i = 0; i < 1_000; i++) {
+                simpleAtomicInteger.getAndUpdate(operand -> --operand);
+            }
+            LOGGER.info("t1 线程的结果 = {}", simpleAtomicInteger.get());
+        }, "t1");
+
+        final Thread t2 = new Thread(() -> {
+            // 第二个线程自增
+            for (int i = 0; i < 500; i++) {
+                simpleAtomicInteger.getAndUpdate(operand -> ++operand);
+            }
+            LOGGER.info("t2 线程的结果 = {}", simpleAtomicInteger.get());
+        }, "t2");
+
+        final Thread t3 = new Thread(() -> {
+            // 第三个线程自增
+            for (int i = 0; i < 500; i++) {
+                simpleAtomicInteger.getAndUpdate(operand -> ++operand);
+            }
+            LOGGER.info("t3 线程的结果 = {}", simpleAtomicInteger.get());
+        }, "t3");
+
+        // 启动三个线程
+        t1.start();
+        t2.start();
+        t3.start();
+
+        // 等待这个三个线程运行结束
+        try {
+            t1.join();
+            t2.join();
+            t3.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // 打印最后的结果
+        LOGGER.info("最终的结果 = {}", simpleAtomicInteger.get());
+
 
 
 
@@ -47,9 +90,13 @@ public class AtomicIntegerAndAtomicLongDemo02 {
          */
         private static final long VALUE_OFFSET;
 
+        public SimpleAtomicInteger(int value) {
+            set(value);
+        }
+
         /*
-            使用unsafe获取value字段的偏移量
-         */
+                    使用unsafe获取value字段的偏移量
+                 */
         static {
             try {
                 final Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
@@ -97,15 +144,14 @@ public class AtomicIntegerAndAtomicLongDemo02 {
          * 获取并更新原子
          *
          * @param intUnaryOperator 返回要更新的值
-         * @return 前一个值
          */
-        public int getAndUpdate(IntUnaryOperator intUnaryOperator) {
+        public void getAndUpdate(IntUnaryOperator intUnaryOperator) {
             // 期望值，要更改的值
             int prev, next;
-            int i = 1;
+            int i = 0;
             // 循环修改
             do {
-                LOGGER.info("第{}次CAS", i++);
+                LOGGER.info("第{}次CAS", ++i);
                 // 获取最新值
                 prev = get();
                 // 得到要更改的值
@@ -113,7 +159,6 @@ public class AtomicIntegerAndAtomicLongDemo02 {
                 // CAS设置值
             } while (!completeAndSet(prev, next));
 
-            return prev;
         }
 
 
