@@ -137,7 +137,8 @@ public class AtomicBooleanAndAtomicReference {
         private void look() {
             // 当已经有线程获取到锁时，进行循环等待释放锁
             while(!atomicBoolean.get()) {
-
+                // 提示当前线程愿意放弃其当前对处理器的使用。
+                Thread.yield();
             }
 
             // 从循环中结束表示，锁已经释放开始争抢锁
