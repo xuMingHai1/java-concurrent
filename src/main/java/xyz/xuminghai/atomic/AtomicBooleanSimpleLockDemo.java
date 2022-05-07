@@ -9,17 +9,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * 2022/4/5 21:34 星期二<br/>
- * <h1>AtomicBoolean和AtomicReference示例</h1>
+ * <h1>AtomicBoolean并发锁示例</h1>
+ *   使用AtomicBoolean的原子性，实现并发锁
  *
  * @author xuMingHai
  */
 @SuppressWarnings("AlibabaAvoidManuallyCreateThread")
-public class AtomicBooleanAndAtomicReference {
+public class AtomicBooleanSimpleLockDemo {
 
     /**
      * 日志记录器
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(AtomicBooleanAndAtomicReference.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AtomicBooleanSimpleLockDemo.class);
 
 
     public static void main(String[] args) {
@@ -30,7 +31,7 @@ public class AtomicBooleanAndAtomicReference {
          */
 
         // 使用原子Boolean实现得简单同步锁
-        final SimpleLook simpleLook = new SimpleLook();
+        final SimpleLock simpleLock = new SimpleLock();
 
         // 多个线程共享的资源
         final StringJoiner stringJoiner = new StringJoiner(",");
@@ -40,7 +41,7 @@ public class AtomicBooleanAndAtomicReference {
             final String name = Thread.currentThread().getName();
 
             // 获取锁
-            simpleLook.look();
+            simpleLock.lock();
             try {
                 LOGGER.info("{} 成功获取锁", name);
                 // 获取锁后先休眠
@@ -53,7 +54,7 @@ public class AtomicBooleanAndAtomicReference {
             } finally {
                 LOGGER.info("{} 开始释放锁", name);
                 // 无论是否成功运行完，都要释放锁
-                simpleLook.unLook();
+                simpleLock.unLock();
 
             }
         }, "t1");
@@ -63,7 +64,7 @@ public class AtomicBooleanAndAtomicReference {
             final String name = Thread.currentThread().getName();
 
             // 获取锁
-            simpleLook.look();
+            simpleLock.lock();
             try {
                 LOGGER.info("{} 成功获取锁", name);
                 // 获取锁后先休眠
@@ -76,7 +77,7 @@ public class AtomicBooleanAndAtomicReference {
             } finally {
                 LOGGER.info("{} 开始释放锁", name);
                 // 无论是否成功运行完，都要释放锁
-                simpleLook.unLook();
+                simpleLock.unLock();
             }
         }, "t2");
 
@@ -85,7 +86,7 @@ public class AtomicBooleanAndAtomicReference {
             final String name = Thread.currentThread().getName();
 
             // 获取锁
-            simpleLook.look();
+            simpleLock.lock();
             try {
                 LOGGER.info("{} 成功获取锁", name);
                 // 获取锁后先休眠
@@ -98,7 +99,7 @@ public class AtomicBooleanAndAtomicReference {
             } finally {
                 LOGGER.info("{} 开始释放锁", name);
                 // 无论是否成功运行完，都要释放锁
-                simpleLook.unLook();
+                simpleLock.unLock();
             }
         }, "t3");
 
@@ -126,7 +127,7 @@ public class AtomicBooleanAndAtomicReference {
     /**
      * 简单的使用原子Boolean实现同步锁
      */
-    private static class SimpleLook {
+    private static class SimpleLock {
         // 使用原子Boolean来模拟锁，默认锁可用状态
         private final AtomicBoolean atomicBoolean = new AtomicBoolean(true);
 
@@ -134,7 +135,7 @@ public class AtomicBooleanAndAtomicReference {
         /**
          * 锁方法，引用同一个原子Boolean，条件为真表示锁可用，为假循环等待
          */
-        private void look() {
+        private void lock() {
             // 当已经有线程获取到锁时，进行循环等待释放锁
             while(!atomicBoolean.get()) {
                 // 提示当前线程愿意放弃其当前对处理器的使用。
@@ -145,7 +146,7 @@ public class AtomicBooleanAndAtomicReference {
             // 尝试获取锁，将锁可用改为false
             if (!atomicBoolean.compareAndSet(true, false)) {
                 // 获取锁失败，则进入递归等待下次获取锁
-                look();
+                lock();
             }
 
             // 成功获得锁，结束方法
@@ -154,7 +155,7 @@ public class AtomicBooleanAndAtomicReference {
         /**
          * 解锁方法，设置原子Boolean为true
          */
-        private void unLook() {
+        private void unLock() {
             atomicBoolean.set(true);
         }
 
