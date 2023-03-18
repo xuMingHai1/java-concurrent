@@ -14,90 +14,87 @@ import org.slf4j.LoggerFactory;
  * 更加详细的测试请参见 concurrency-test模块的VolatileTest
  * @author xuMingHai
  */
-@SuppressWarnings("AlibabaAvoidManuallyCreateThread")
 public class VolatileDemo05 {
 
-    /**
-     * 日志记录器
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(VolatileDemo05.class);
+	/**
+	 * 日志记录器
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(VolatileDemo05.class);
 
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 
-        // 原子性测试
-        Demo1.test();
+		// 原子性测试
+		Demo1.test();
 
-        // 防止指令重排序测试
-        Demo2.getInstance().printMessage();
+		// 防止指令重排序测试
+		Demo2.getInstance().printMessage();
 
-    }
-
-
-    /**
-     * 原子性测试（一个线程写，多个线程读）
-     */
-    private static class Demo1 {
-
-        /**
-         * 多个线程的共享资源，添加volatile确保可见性
-         */
-        private volatile static long value;
-
-        public static void test() {
-            // 线程1写
-            final Thread t1 = new Thread(() -> value = 10);
-
-            // 线程2读
-            final Thread t2 = new Thread(() -> LOGGER.info("value = {}", value));
-
-            // 线程3读
-            final Thread t3 = new Thread(() -> LOGGER.info("value = {}", value));
-
-            // 启动线程
-            t1.start();
-            t2.start();
-            t3.start();
-
-            // 主线程读
-            LOGGER.info("value = {}", value);
-
-        }
+	}
 
 
-    }
+	/**
+	 * 原子性测试（一个线程写，多个线程读）
+	 */
+	private static class Demo1 {
 
-    /**
-     * 防止指令重排序
-     */
-    private static class Demo2 {
+		/**
+		 * 多个线程的共享资源，添加volatile确保可见性
+		 */
+		private volatile static long value;
 
-        /**
-         * 添加volatile确保在赋值的时候不会先获取值后再赋值
-         */
-        private volatile static Instance instance;
+		public static void test() {
+			// 线程1写
+			final Thread t1 = new Thread(() -> value = 10);
 
-        public static Instance getInstance() {
-            // 先不加锁判断是否为null
-            if (instance == null) {
-                // 获取锁之后再次判断，如果没有其他线程已经创建了实例对象就创建
-                synchronized (Demo2.class) {
-                    if (instance == null) {
-                        instance = new Instance();
-                    }
-                }
-            }
-            return instance;
-        }
+			// 线程2读
+			final Thread t2 = new Thread(() -> LOGGER.info("value = {}", value));
 
-        private static class Instance {
+			// 线程3读
+			final Thread t3 = new Thread(() -> LOGGER.info("value = {}", value));
 
-            public void printMessage() {
-                LOGGER.info("Hello Word!");
-            }
-        }
+			// 启动线程
+			t1.start();
+			t2.start();
+			t3.start();
 
-    }
+			// 主线程读
+			LOGGER.info("value = {}", value);
 
+		}
+
+	}
+
+	/**
+	 * 防止指令重排序
+	 */
+	private static class Demo2 {
+
+		/**
+		 * 添加volatile确保在赋值的时候不会先获取值后再赋值
+		 */
+		private volatile static Instance instance;
+
+		public static Instance getInstance() {
+			// 先不加锁判断是否为null
+			if (instance == null) {
+				// 获取锁之后再次判断，如果没有其他线程已经创建了实例对象就创建
+				synchronized (Demo2.class) {
+					if (instance == null) {
+						instance = new Instance();
+					}
+				}
+			}
+			return instance;
+		}
+
+		private static class Instance {
+
+			public void printMessage() {
+				LOGGER.info("Hello Word!");
+			}
+		}
+
+	}
 
 }

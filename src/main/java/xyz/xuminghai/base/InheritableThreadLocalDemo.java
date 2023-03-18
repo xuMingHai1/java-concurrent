@@ -1,5 +1,8 @@
 package xyz.xuminghai.base;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 2023/3/15 23:51 星期三<br/>
  *
@@ -11,6 +14,11 @@ package xyz.xuminghai.base;
  */
 public class InheritableThreadLocalDemo {
 
+	/**
+	 * 日志记录器
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(InheritableThreadLocalDemo.class);
+
 	private static final ThreadLocal<String> THREAD_LOCAL = new InheritableThreadLocal<String>() {
 		@Override
 		protected String initialValue() {
@@ -18,18 +26,21 @@ public class InheritableThreadLocalDemo {
 		}
 	};
 
+
 	public static void main(String[] args) throws InterruptedException {
 
-		Thread t1 = new Thread(() -> System.out.println(Thread.currentThread().getName() + "：THREAD_LOCAL = " + THREAD_LOCAL.get()), "t1");
+		Thread t1 = new Thread(() -> LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get()),
+				"t1");
 		t1.start();
 		t1.join();
 
-		System.out.println(Thread.currentThread().getName() + "：THREAD_LOCAL = " + THREAD_LOCAL.get());
+		LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
 
 		THREAD_LOCAL.set("李四");
-		Thread t2 = new Thread(() -> System.out.println(Thread.currentThread().getName() + "：THREAD_LOCAL = " + THREAD_LOCAL.get()), "t2");
+		Thread t2 = new Thread(() -> LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get()),
+				"t2");
 		t2.start();
-		System.out.println(Thread.currentThread().getName() + "：THREAD_LOCAL = " + THREAD_LOCAL.get());
+		LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
 
 	}
 

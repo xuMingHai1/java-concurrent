@@ -2,6 +2,9 @@ package xyz.xuminghai.atomic;
 
 import java.util.concurrent.atomic.AtomicIntegerArray;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 2023/3/13 17:30 星期一<br/>
  *
@@ -12,7 +15,13 @@ import java.util.concurrent.atomic.AtomicIntegerArray;
  */
 public class AtomicIntegerArrayDemo {
 
+	/**
+	 * 日志记录器
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(AtomicIntegerArrayDemo.class);
+
 	private static final AtomicIntegerArray ATOMIC_INTEGER_ARRAY = new AtomicIntegerArray(3);
+
 
 	public static void main(String[] args) {
 		Thread t1 = new Thread(() -> {
@@ -27,7 +36,6 @@ public class AtomicIntegerArrayDemo {
 					ATOMIC_INTEGER_ARRAY.getAndIncrement(0);
 				}
 			}
-
 		}, "t1");
 
 		Thread t2 = new Thread(() -> {
@@ -42,7 +50,6 @@ public class AtomicIntegerArrayDemo {
 					ATOMIC_INTEGER_ARRAY.getAndDecrement(0);
 				}
 			}
-
 		}, "t2");
 
 		Thread t3 = new Thread(() -> {
@@ -57,7 +64,6 @@ public class AtomicIntegerArrayDemo {
 					ATOMIC_INTEGER_ARRAY.getAndDecrement(0);
 				}
 			}
-
 		}, "t3");
 
 		t1.start();
@@ -73,7 +79,7 @@ public class AtomicIntegerArrayDemo {
 			throw new RuntimeException(e);
 		}
 
-		System.out.println(ATOMIC_INTEGER_ARRAY);
+		LOGGER.info("ATOMIC_INTEGER_ARRAY = {}", ATOMIC_INTEGER_ARRAY);
 	}
 
 }
