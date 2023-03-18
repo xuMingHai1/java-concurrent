@@ -3,6 +3,9 @@ package xyz.xuminghai.atomic;
 import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 2023/3/14 14:07 星期二<br/>
  *
@@ -12,6 +15,12 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
  * @author xuMingHai
  */
 public class AtomicIntegerFieldUpdateDemo {
+
+	/**
+	 * 日志记录器
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(AtomicIntegerFieldUpdateDemo.class);
+
 
 	public static void main(String[] args) {
 
@@ -38,7 +47,7 @@ public class AtomicIntegerFieldUpdateDemo {
 			throw new RuntimeException(e);
 		}
 
-		System.out.println(volatileInteger);
+		LOGGER.info("volatileInteger = {}", volatileInteger);
 
 	}
 

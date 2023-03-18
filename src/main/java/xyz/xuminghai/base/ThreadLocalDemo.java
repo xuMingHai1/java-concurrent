@@ -1,5 +1,8 @@
 package xyz.xuminghai.base;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 2023/3/15 23:34 星期三<br/>
  *
@@ -11,31 +14,37 @@ package xyz.xuminghai.base;
 public class ThreadLocalDemo {
 
 	/**
+	 * 日志记录器
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(ThreadLocalDemo.class);
+
+	/**
 	 * 使用类变量，可以避免不必要的弱引用清除key
 	 */
 	private static final ThreadLocal<Integer> THREAD_LOCAL = ThreadLocal.withInitial(() -> 0);
 
+
 	public static void main(String[] args) {
 
 		new Thread(() -> {
-			System.out.println(Thread.currentThread().getName() + "：THREAD_LOCAL = " + THREAD_LOCAL.get());
+			LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
 			THREAD_LOCAL.set(1);
-			System.out.println(Thread.currentThread().getName() + "：THREAD_LOCAL = " + THREAD_LOCAL.get());
+			LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
 		}, "t1").start();
 
 		new Thread(() -> {
-			System.out.println(Thread.currentThread().getName() + "：THREAD_LOCAL = " + THREAD_LOCAL.get());
+			LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
 			THREAD_LOCAL.set(2);
-			System.out.println(Thread.currentThread().getName() + "：THREAD_LOCAL = " + THREAD_LOCAL.get());
+			LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
 		}, "t2").start();
 
 		new Thread(() -> {
-			System.out.println(Thread.currentThread().getName() + "：THREAD_LOCAL = " + THREAD_LOCAL.get());
+			LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
 			THREAD_LOCAL.set(3);
-			System.out.println(Thread.currentThread().getName() + "：THREAD_LOCAL = " + THREAD_LOCAL.get());
+			LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
 		}, "t3").start();
 
-		System.out.println(Thread.currentThread().getName() + "：THREAD_LOCAL = " + THREAD_LOCAL.get());
+		LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
 	}
 
 }

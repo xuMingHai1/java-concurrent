@@ -5,6 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 2023/3/15 21:19 星期三<br/>
  *
@@ -13,6 +16,12 @@ import java.util.concurrent.TimeUnit;
  * @author xuMingHai
  */
 public class ThreadStackDemo {
+
+	/**
+	 * 日志记录器
+	 */
+	private static final Logger LOGGER = LoggerFactory.getLogger(ThreadStackDemo.class);
+
 
 	public static void main(String[] args) {
 		Thread t1 = new Thread(() -> {
@@ -25,7 +34,7 @@ public class ThreadStackDemo {
 				throw new RuntimeException(e);
 			}
 			list.add("1");
-			System.out.println("list = " + list);
+			LOGGER.info("list = {}", list);
 			list.clear();
 		}, "t1");
 
@@ -33,7 +42,7 @@ public class ThreadStackDemo {
 
 		// 直到线程死亡停止循环
 		while (t1.isAlive()) {
-			System.out.println(Arrays.toString(t1.getStackTrace()));
+			LOGGER.info(Arrays.toString(t1.getStackTrace()));
 		}
 	}
 
