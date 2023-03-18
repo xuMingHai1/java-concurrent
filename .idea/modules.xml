@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/concurrency-test/concurrency-test.iml" filepath="$PROJECT_DIR$/concurrency-test/concurrency-test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/java-concurrent.iml" filepath="$PROJECT_DIR$/.idea/java-concurrent.iml" />
-    </modules>
-  </component>
-</project>
