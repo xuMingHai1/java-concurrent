@@ -54,7 +54,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
         <!--
             jcstress version to use with this project.
           -->
-        <jcstress.version>0.15</jcstress.version>
+        <jcstress.version>0.16</jcstress.version>
 
         <!--
             Name of the test Uber-JAR to generate.
