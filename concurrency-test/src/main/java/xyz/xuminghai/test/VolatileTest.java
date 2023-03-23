@@ -23,46 +23,45 @@ import org.openjdk.jcstress.infra.results.I_Result;
 @State
 public class VolatileTest {
 
-    /**
-     * 多个线程共享的值
-     */
-    int i;
+	/**
+	 * 多个线程共享的值
+	 */
+	int i;
 
-    /**
-     * 添加volatile 对其修改后立即可见
-     */
-    volatile boolean flag;
+	/**
+	 * 添加volatile 对其修改后立即可见
+	 */
+	volatile boolean flag;
 
     /*
         添加volatile后，无论这两个线程谁先运行，结果都不会出现0
      */
 
-    @Actor
-    public void actor1(I_Result r) {
-        // 在没有volatile修饰的情况下，期望只会出现1或者2，但是还有可能因为指令重排的原因，i = 0;
-        if (flag) {
-            r.r1 = i + i;
-        } else {
-            r.r1 = 1;
-        }
+	@Actor
+	public void actor1(I_Result r) {
+		// 在没有volatile修饰的情况下，期望只会出现1或者2，但是还有可能因为指令重排的原因，i = 0;
+		if (flag) {
+			r.r1 = i + i;
+		}
+		else {
+			r.r1 = 1;
+		}
 
-    }
+	}
 
-    /**
-     * 在volatile修饰 flag 情况下，如果线程2先运行，线程1的判断为真，一定会出现2<br/>
-     * 如果线程1先运行，那么线程1的判断为假，一定会出现1<br/><br/>
-     * 在没有volatile修饰 flag 情况下，如果线程2先运行，则可能会出现执行重排序，先运行 flag = true
-     * 后赋值 i = 1，然后这时线程1启动了，获取到的i还是0，所以会出现结果是0
-     */
-    @Actor
-    public void actor2() {
-        // 由于happen-before，i=1 一定是可见的
-        i = 1;
-        // 可能因为重排序原因这个在前面运行，但是volatile和JMM（java内存模型）的happen-before 之前的可见性
-        flag = true;
+	/**
+	 * 在volatile修饰 flag 情况下，如果线程2先运行，线程1的判断为真，一定会出现2<br/>
+	 * 如果线程1先运行，那么线程1的判断为假，一定会出现1<br/><br/>
+	 * 在没有volatile修饰 flag 情况下，如果线程2先运行，则可能会出现执行重排序，先运行 flag = true
+	 * 后赋值 i = 1，然后这时线程1启动了，获取到的i还是0，所以会出现结果是0
+	 */
+	@Actor
+	public void actor2() {
+		// 由于happen-before，i=1 一定是可见的
+		i = 1;
+		// 可能因为重排序原因这个在前面运行，但是volatile和JMM（java内存模型）的happen-before 之前的可见性
+		flag = true;
 
-
-    }
-
+	}
 
 }

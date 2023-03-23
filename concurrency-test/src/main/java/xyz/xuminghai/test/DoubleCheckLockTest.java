@@ -36,54 +36,53 @@ import java.io.Serializable;
 @State
 public class DoubleCheckLockTest {
 
-    private volatile static Instance instance;
+	private volatile static Instance instance;
 
-    public static Instance getInstance() {
-        Instance result = instance;
-        if (result == null) {
-            synchronized (DoubleCheckLockTest.class) {
-                result = instance;
-                if (result == null) {
-                    instance = new Instance();
-                }
-            }
-        }
-        return instance;
-    }
+	public static Instance getInstance() {
+		Instance result = instance;
+		if (result == null) {
+			synchronized (DoubleCheckLockTest.class) {
+				result = instance;
+				if (result == null) {
+					instance = new Instance();
+				}
+			}
+		}
+		return instance;
+	}
 
-    private static class Instance implements Serializable {
+	private static class Instance implements Serializable {
 
-        private static final long serialVersionUID = -3949564844175144101L;
+		private static final long serialVersionUID = -3949564844175144101L;
 
-        @Override
-        public String toString() {
-            return "Instance";
-        }
-    }
+		@Override
+		public String toString() {
+			return "Instance";
+		}
+	}
 
         /*
       使用4个线程测试
      */
 
-    @Actor
-    public void actor1(L_Result r) {
-        r.r1 = getInstance();
-    }
+	@Actor
+	public void actor1(L_Result r) {
+		r.r1 = getInstance();
+	}
 
-    @Actor
-    public void actor2(L_Result r) {
-        r.r1 = getInstance();
-    }
+	@Actor
+	public void actor2(L_Result r) {
+		r.r1 = getInstance();
+	}
 
-    @Actor
-    public void actor3(L_Result r) {
-        r.r1 = getInstance();
-    }
+	@Actor
+	public void actor3(L_Result r) {
+		r.r1 = getInstance();
+	}
 
-    @Actor
-    public void actor4(L_Result r) {
-        r.r1 = getInstance();
-    }
-
+	@Actor
+	public void actor4(L_Result r) {
+		r.r1 = getInstance();
+	}
 
 }

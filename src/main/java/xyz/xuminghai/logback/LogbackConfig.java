@@ -52,7 +52,7 @@ public class LogbackConfig extends ContextAwareBase implements Configurator {
 		// 在root记录器添加附加器
 		loggerContext.getLogger(Logger.ROOT_LOGGER_NAME).addAppender(consoleAppender);
 
-		return ExecutionStatus.NEUTRAL;
+		return ExecutionStatus.DO_NOT_INVOKE_NEXT_IF_ANY;
 	}
 
 }

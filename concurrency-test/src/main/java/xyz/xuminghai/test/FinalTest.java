@@ -16,39 +16,41 @@ import org.openjdk.jcstress.infra.results.IIII_Result;
 @State
 public class FinalTest {
 
-    int v = 1;
+	int v = 1;
 
-    MyObject o;
+	MyObject o;
 
-    @Actor
-    public void actor1() {
-        o = new MyObject(v);
-    }
+	@Actor
+	public void actor1() {
+		o = new MyObject(v);
+	}
 
-    @Actor
-    public void actor2(IIII_Result r) {
-        MyObject o = this.o;
-        if (o != null) {
-            r.r1 = o.x1;
-            r.r2 = o.x2;
-            r.r3 = o.x3;
-            r.r4 = o.x4;
-        } else {
-            r.r1 = -1;
-            r.r2 = -1;
-            r.r3 = -1;
-            r.r4 = -1;
-        }
-    }
+	@Actor
+	public void actor2(IIII_Result r) {
+		MyObject o = this.o;
+		if (o != null) {
+			r.r1 = o.x1;
+			r.r2 = o.x2;
+			r.r3 = o.x3;
+			r.r4 = o.x4;
+		}
+		else {
+			r.r1 = -1;
+			r.r2 = -1;
+			r.r3 = -1;
+			r.r4 = -1;
+		}
+	}
 
-    public static class MyObject {
-        int x1, x2, x3, x4;
-        public MyObject(int v) {
-            x1 = v;
-            x2 = x1 + v;
-            x3 = x2 + v;
-            x4 = x3 + v;
-        }
-    }
+	public static class MyObject {
+		int x1, x2, x3, x4;
+
+		public MyObject(int v) {
+			x1 = v;
+			x2 = x1 + v;
+			x3 = x2 + v;
+			x4 = x3 + v;
+		}
+	}
 
 }
