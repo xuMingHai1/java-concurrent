@@ -14,34 +14,34 @@ import org.slf4j.LoggerFactory;
  */
 public class InheritableThreadLocalDemo {
 
-	/**
-	 * 日志记录器
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(InheritableThreadLocalDemo.class);
+    /**
+     * 日志记录器
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(InheritableThreadLocalDemo.class);
 
-	private static final ThreadLocal<String> THREAD_LOCAL = new InheritableThreadLocal<String>() {
-		@Override
-		protected String initialValue() {
-			return "张三";
-		}
-	};
+    private static final ThreadLocal<String> THREAD_LOCAL = new InheritableThreadLocal<String>() {
+        @Override
+        protected String initialValue() {
+            return "张三";
+        }
+    };
 
 
-	public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException {
 
-		Thread t1 = new Thread(() -> LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get()),
-				"t1");
-		t1.start();
-		t1.join();
+        Thread t1 = new Thread(() -> LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get()),
+                "t1");
+        t1.start();
+        t1.join();
 
-		LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
+        LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
 
-		THREAD_LOCAL.set("李四");
-		Thread t2 = new Thread(() -> LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get()),
-				"t2");
-		t2.start();
-		LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
+        THREAD_LOCAL.set("李四");
+        Thread t2 = new Thread(() -> LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get()),
+                "t2");
+        t2.start();
+        LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
 
-	}
+    }
 
 }

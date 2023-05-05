@@ -13,38 +13,38 @@ import org.slf4j.LoggerFactory;
  */
 public class ThreadLocalDemo {
 
-	/**
-	 * 日志记录器
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(ThreadLocalDemo.class);
+    /**
+     * 日志记录器
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadLocalDemo.class);
 
-	/**
-	 * 使用类变量，可以避免不必要的弱引用清除key
-	 */
-	private static final ThreadLocal<Integer> THREAD_LOCAL = ThreadLocal.withInitial(() -> 0);
+    /**
+     * 使用类变量，可以避免不必要的弱引用清除key
+     */
+    private static final ThreadLocal<Integer> THREAD_LOCAL = ThreadLocal.withInitial(() -> 0);
 
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		new Thread(() -> {
-			LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
-			THREAD_LOCAL.set(1);
-			LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
-		}, "t1").start();
+        new Thread(() -> {
+            LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
+            THREAD_LOCAL.set(1);
+            LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
+        }, "t1").start();
 
-		new Thread(() -> {
-			LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
-			THREAD_LOCAL.set(2);
-			LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
-		}, "t2").start();
+        new Thread(() -> {
+            LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
+            THREAD_LOCAL.set(2);
+            LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
+        }, "t2").start();
 
-		new Thread(() -> {
-			LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
-			THREAD_LOCAL.set(3);
-			LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
-		}, "t3").start();
+        new Thread(() -> {
+            LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
+            THREAD_LOCAL.set(3);
+            LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
+        }, "t3").start();
 
-		LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
-	}
+        LOGGER.info("THREAD_LOCAL = {}", THREAD_LOCAL.get());
+    }
 
 }

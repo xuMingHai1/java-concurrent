@@ -1,9 +1,9 @@
 package xyz.xuminghai.atomic;
 
-import java.util.concurrent.atomic.LongAdder;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.atomic.LongAdder;
 
 /**
  * 2023/3/22 15:03 星期三<br/>
@@ -17,48 +17,47 @@ import org.slf4j.LoggerFactory;
  */
 public class LongAdderDemo {
 
-	/**
-	 * 日志记录器
-	 */
-	private static final Logger LOGGER = LoggerFactory.getLogger(AtomicMarkReferenceDemo.class);
+    /**
+     * 日志记录器
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(AtomicMarkReferenceDemo.class);
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		// long 类型累加器
-		final LongAdder longAdder = new LongAdder();
+        // long 类型累加器
+        final LongAdder longAdder = new LongAdder();
 
-		Thread t1 = new Thread(() -> {
-			for (int i = 0; i < 100; i++) {
-				longAdder.increment();
-			}
-		}, "t1");
+        Thread t1 = new Thread(() -> {
+            for (int i = 0; i < 100; i++) {
+                longAdder.increment();
+            }
+        }, "t1");
 
-		Thread t2 = new Thread(() -> {
-			for (int i = 0; i < 100; i++) {
-				longAdder.increment();
-			}
-		}, "t2");
+        Thread t2 = new Thread(() -> {
+            for (int i = 0; i < 100; i++) {
+                longAdder.increment();
+            }
+        }, "t2");
 
-		Thread t3 = new Thread(() -> {
-			for (int i = 0; i < 100; i++) {
-				longAdder.decrement();
-			}
-		}, "t3");
+        Thread t3 = new Thread(() -> {
+            for (int i = 0; i < 100; i++) {
+                longAdder.decrement();
+            }
+        }, "t3");
 
-		t1.start();
-		t2.start();
-		t3.start();
+        t1.start();
+        t2.start();
+        t3.start();
 
-		try {
-			t1.join();
-			t2.join();
-			t3.join();
-		}
-		catch (InterruptedException e) {
-			throw new RuntimeException(e);
-		}
+        try {
+            t1.join();
+            t2.join();
+            t3.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
-		LOGGER.info("longAdder = {}", longAdder);
-	}
+        LOGGER.info("longAdder = {}", longAdder);
+    }
 
 }
